@@ -1,0 +1,82 @@
+﻿1,缓动公式:
+sprite.x += (targetX – sprite.x) * easing;//easing为缓动系数变量
+sprite.y += (targetY – sprite.y) * easing;
+
+
+2,弹性公式:
+vx += (targetX – sprite.x) * spring;//spring为弹性系数
+vy += (targetY – sprite.y) * spring;
+sprite.x += (vx *= friction);//friction为摩擦力
+sprite.y += (vy *= friction);
+要注意的是friction数值要合理，否则动画会很生硬
+
+
+3,偏移弹性公式:
+var dx:Number = sprite.x – fixedX;
+var dy:Number = sprite.y – fixedY;
+var angle:Number = Math.atan2(dy, dx);
+var targetX:Number = fixedX + Math.cos(angle) * springLength;
+var targetY:Number = fixedX + Math.sin(angle) * springLength;
+
+
+4,向鼠标旋转
+dx = mouseX – sprite.x;
+dy = mouseY – sprite.y;
+sprite.rotation = Math.atan2(dy, dx) * 180 / Math.PI;
+
+
+5,心跳:
+public function onEnterFrame1(event:Event):void {
+    ball.scaleX=centerScale+Math.sin(angle)*range;
+    ball.scaleY=centerScale+Math.sin(angle)*range;
+    angle+=speed;
+}
+模拟心跳效果，里面使用到了震荡波
+
+
+6,颜色运算得到透明值:
+var t:uint=0x77ff8877
+var s:uint=0xff000000
+var h:uint=t&s
+var m:uint=h>>>24
+trace(m)
+
+
+7,按位运算得到颜色值:
+color24 = red << 16 | green << 8 | blue;
+color32 = alpha << 24 | red << 16 | green << 8 | blue;
+
+
+
+8,鼠标到sprite连线:
+public function onMouseMove(event:MouseEvent):void {
+    graphics.clear();
+    graphics.lineStyle(1, 0, 1);
+    graphics.moveTo(sprite1.x, sprite1.y);
+    graphics.lineTo(mouseX, mouseY);
+    var dx:Number=sprite1.x-mouseX;
+    var dy:Number=sprite1.y-mouseY;
+    var dist:Number=int(Math.sqrt(dx*dx+dy*dy));
+    textField.text=dist.toString();
+}
+
+
+
+
+9,电流动画:
+function Draw():void {  
+            //每次绘制之前先清屏  
+            sp.graphics.clear();  
+            //设置线条样式  
+            sp.graphics.lineStyle(1,0x00ccff);  
+            //起始绘制位置  
+            sp.graphics.moveTo(0,100);  
+            //使用循环绘制多节点图形  
+            for (var i:int=0; i < 400; i=i + 3) {  
+                //绘制的位置  
+                var rx=i;  
+                var ry=90+ 20 * Math.random();  
+                //绘制  
+                sp.graphics.lineTo(rx,ry);  
+            }  
+        }
